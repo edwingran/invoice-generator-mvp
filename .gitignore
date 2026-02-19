@@ -1,0 +1,43 @@
+# 🔹 Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 🔹 Entornos virtuales (IMPORTANTE)
+venv/
+.env/
+.venv/
+
+# 🔹 Archivos de entorno (variables secretas)
+.env
+.env.*
+
+# 🔹 Base de datos (cuando se use SQLite)
+*.db
+*.sqlite3
+
+# 🔹 Archivos de sistema (Linux / WSL)
+.DS_Store
+Thumbs.db
+
+# 🔹 Logs
+*.log
+
+# 🔹 VS Code
+.vscode/
+
+# 🔹 Archivos temporales
+*.tmp
+*.swp
+
+# 🔹 Archivos de testing y coverage (futuro)
+.coverage
+htmlcov/
+.pytest_cache/
+
+# 🔹 Archivos de build (futuro despliegue)
+dist/
+build/
+
+# 🔹 PDFs generados (cuando se hagan las cuentas de cobro)
+*.pdf
