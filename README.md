@@ -152,22 +152,35 @@ Incluye:
 
 ## 🏗️ Estado del Proyecto
 
-🔹 Versión actual: MVP (datos en memoria)
-🔹 Próximo paso: Persistencia con SQLite
-🔹 Futuras mejoras:
+🔹 Versión actual: MVP (datos en memoria)  
+🔹 Próximo paso: Persistencia con SQLite  
 
-* Base de datos SQLite
-* CRUD completo
-* Validaciones avanzadas
-* Dockerización
-* Autenticación JWT
+### 🗺️ Roadmap del Proyecto
+
+#### 🔹 Backend
+- [ ] Implementar base de datos SQLite
+- [ ] CRUD completo con persistencia
+- [ ] Validaciones avanzadas
+- [ ] Autenticación con JWT
+
+#### 🎨 Frontend
+- [ ] Desarrollo de interfaz web (HTML, CSS, JavaScript)
+- [ ] Conexión del frontend con la API backend
+- [ ] Dashboard interactivo para gestión de datos
+
+#### ☁️ Producción & DevOps
+- [ ] Dockerización del proyecto
+- [ ] Despliegue en la nube (Render / Railway / AWS)
+- [ ] Configuración de variables de entorno
+- [ ] Documentación de la API
+
 
 ---
 
 ## 👨‍💻 Autor
 
-**Edwin Granada**
-Ingeniero Físico | Backend Developer en formación
+**Edwin Granada**  
+Ingeniero Físico | Backend Developer  
 Enfoque: Python, APIs, Automatización y Data
 
 ---
