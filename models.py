@@ -2,7 +2,7 @@
 from pydantic import BaseModel, EmailStr
 from sqlmodel import SQLModel, Field
 
-
+# Customer models
 class CustomerBase(SQLModel):
     name: str = Field(default=None)
     description: str | None = Field(default=None)
@@ -12,12 +12,14 @@ class CustomerBase(SQLModel):
 class CustomerCreate(CustomerBase):
     pass
 
-
 class Customer(CustomerBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
+class CustomerDeleteResponse(BaseModel):
+    message: str = Field(default=None)
+    customer: Customer = Field(default=None)
 
-
+# Transaction model
 class Transaction(BaseModel):
     id: int
     ammount: int
