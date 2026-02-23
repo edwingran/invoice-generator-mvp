@@ -12,6 +12,12 @@ class CustomerBase(SQLModel):
 class CustomerCreate(CustomerBase):
     pass
 
+class CustomerUpdate(SQLModel):
+    name: str | None = None
+    description: str | None = None
+    email: EmailStr | None = None
+    age: int | None = None
+
 class Customer(CustomerBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
