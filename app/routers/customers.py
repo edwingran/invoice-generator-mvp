@@ -1,39 +1,13 @@
-from fastapi import FastAPI, HTTPException, status
-from datetime import datetime
 
-import zoneinfo
-from models import Customer, CustomerCreate, CustomerUpdate, CustomerDeleteResponse, Transaction, Invoice
-from db import SessionDep, create_all_tables
+from fastapi import APIRouter, status, HTTPException
 from sqlmodel import select
 
+from models import Customer, CustomerCreate, CustomerUpdate, CustomerDeleteResponse
+from db import SessionDep
 
+router = APIRouter()
 
-app = FastAPI(lifespan=create_all_tables)
-
-@app.get("/")
-async def root():
-    return{"message" : "invoice-generator-mvp"}
-
-country_timezones = {
-    "CO": "America/Bogota",
-    "MX": "America/Mexico_City",
-    "AR": "America/Argentina/Buenos_Aires",
-    "BR": "America/Sao_Paulo",
-    "PE": "America/Lima",
-}
-
-@app.get("/time/{iso_code}")
-async def time(iso_code: str):
-    # Co --> CO
-    iso = iso_code.upper()
-    timezone_str = country_timezones.get(iso)
-    tz = zoneinfo.ZoneInfo(timezone_str)
-    return{"time" : datetime.now(tz)}
-
-db_customer: list[Customer] = []
-
-
-@app.post("/customers", response_model=Customer)
+@router.post("/customers", response_model=Customer, tags=["customers"])
 async def create_customer(customer_data: CustomerCreate, session: SessionDep):
     customer = Customer.model_validate(customer_data.model_dump())
     session.add(customer)
@@ -41,7 +15,7 @@ async def create_customer(customer_data: CustomerCreate, session: SessionDep):
     session.refresh(customer)
     return customer
 
-@app.get("/customers/{customer_id}", response_model=Customer)
+@router.get("/customers/{customer_id}", response_model=Customer, tags=["customers"])
 async def read_customer(customer_id: int, session: SessionDep):
     customer_db = session.get(Customer, customer_id)
     if not customer_db:
@@ -49,7 +23,7 @@ async def read_customer(customer_id: int, session: SessionDep):
     return customer_db
 
 
-@app.patch("/customers/{customer_id}", response_model=Customer, status_code=status.HTTP_200_OK)
+@router.patch("/customers/{customer_id}", response_model=Customer, status_code=status.HTTP_200_OK, tags=["customers"])
 async def update_customer(customer_id: int, customer_data: CustomerUpdate, session: SessionDep):
     customer_db = session.get(Customer, customer_id)
     if not customer_db:
@@ -63,7 +37,7 @@ async def update_customer(customer_id: int, customer_data: CustomerUpdate, sessi
     return customer_db
 
 
-@app.delete("/customers/{customer_id}", response_model=CustomerDeleteResponse)
+@router.delete("/customers/{customer_id}", response_model=CustomerDeleteResponse, tags=["customers"])
 async def delete_customer(customer_id: int, session: SessionDep):
     customer_db = session.get(Customer, customer_id)
     if not customer_db:
@@ -76,18 +50,7 @@ async def delete_customer(customer_id: int, session: SessionDep):
         "customer": customer_db
     }
 
-@app.get("/customers", response_model=list[Customer])
+@router.get("/customers", response_model=list[Customer], tags=["customers"])
 async def list_customer(session: SessionDep):
     customers = session.exec(select(Customer)).all()
     return customers
-
-
-@app.post("/transactions")
-async def create_transaction(transaction_data: Transaction):
-
-    return transaction_data
-
-@app.post("/invoices")
-async def create_invoices(invoice_data: Invoice):
-
-    return invoice_data 

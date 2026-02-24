@@ -31,6 +31,7 @@ class Transaction(BaseModel):
     ammount: int
     description: str
 
+# Invoice model
 class Invoice(BaseModel):
     id: int
     customer: Customer
