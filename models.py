@@ -1,6 +1,19 @@
 
 from pydantic import BaseModel, EmailStr
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
+
+# Plan models
+class CustomerPlan(SQLModel, table=True):
+    id: int = Field(primary_key=True)
+    plan_id: int = Field(foreign_key="plan.id")
+    customer_id: int = Field(foreign_key="customer.id")
+
+class Plan(SQLModel, table=True):
+    id: int | None = Field(primary_key=True)
+    name: str = Field(default=None)
+    price: int = Field(default=None)
+    description: str = Field(default=None)
+    customers: list["Customer"] = Relationship(back_populates="plans", link_model=CustomerPlan)
 
 # Customer models
 class CustomerBase(SQLModel):
@@ -20,16 +33,29 @@ class CustomerUpdate(SQLModel):
 
 class Customer(CustomerBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    transactions: list["Transaction"] = Relationship(back_populates="customer")
+    plans: list[Plan] = Relationship(back_populates="customers", link_model=CustomerPlan)
 
 class CustomerDeleteResponse(BaseModel):
     message: str = Field(default=None)
     customer: Customer = Field(default=None)
 
+
 # Transaction model
-class Transaction(BaseModel):
-    id: int
-    ammount: int
+
+class TransactionBase(SQLModel):
+    amount: int
     description: str
+
+
+class Transaction(TransactionBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    customer_id: int = Field(foreign_key="customer.id")
+    customer: Customer = Relationship(back_populates="transactions")
+
+class TransactionCreate(TransactionBase):
+    customer_id: int = Field(foreign_key="customer.id")
+    
 
 # Invoice model
 class Invoice(BaseModel):
@@ -39,5 +65,5 @@ class Invoice(BaseModel):
     total: int
 
     @property
-    def ammount_total(self):
-        return sum(transaction.ammount for transaction in self.transactions)
+    def amount_total(self):
+        return sum(transaction.amount for transaction in self.transactions)
