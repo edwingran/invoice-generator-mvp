@@ -4,13 +4,14 @@ from datetime import datetime
 import zoneinfo
 from db import create_all_tables
 from sqlmodel import select
-from .routers import customers, transactions, invoices
+from .routers import plans, customers, transactions, invoices
 
 
 app = FastAPI(lifespan=create_all_tables)
 app.include_router(customers.router)
 app.include_router(transactions.router)
 app.include_router(invoices.router)
+app.include_router(plans.router)
 
 @app.get("/")
 async def root():
