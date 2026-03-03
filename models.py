@@ -39,7 +39,7 @@ class CustomerBase(SQLModel):
         if result:
             raise ValueError("This email is already registered")
         return value
-    # Se pueden hacer más validaciones
+    # Se pueden hacer más validaciones / mover la validacion fuera de los modelos
 
 
 class CustomerCreate(CustomerBase):
@@ -68,13 +68,13 @@ class TransactionBase(SQLModel):
     description: str
 
 
-class Transaction(TransactionBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    customer_id: int = Field(foreign_key="customer.id")
-    customer: Customer = Relationship(back_populates="transactions")
+class Transaction(TransactionBase, table= True):
+    id: int | None = Field(default= None, primary_key= True)
+    customer_id: int = Field(foreign_key= "customer.id")
+    customer: Customer = Relationship(back_populates= "transactions")
 
 class TransactionCreate(TransactionBase):
-    customer_id: int = Field(foreign_key="customer.id")
+    customer_id: int = Field(foreign_key= "customer.id")
     
 
 # Invoice model

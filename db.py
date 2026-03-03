@@ -6,9 +6,12 @@ from sqlmodel import Session, create_engine, SQLModel
 # Ruta absoluta al directorio del proyecto
 BASE_DIR = Path(__file__).resolve().parent
 
-sqlite_name = "db.sqlite3"
+"""sqlite_name = "db.sqlite3"
 sqlite_path = BASE_DIR / sqlite_name
-sqlite_url = f"sqlite:///{sqlite_path}"
+sqlite_url = f"sqlite:///{sqlite_path}"""
+
+sqlite_name = "db.sqlite3"
+sqlite_url = f"sqlite:///{sqlite_name}"
 
 engine = create_engine(sqlite_url, echo=True)
 

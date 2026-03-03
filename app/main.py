@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+import time
+from fastapi import FastAPI, Request
 from datetime import datetime
 
 import zoneinfo
@@ -13,6 +14,14 @@ app.include_router(transactions.router)
 app.include_router(invoices.router)
 app.include_router(plans.router)
 
+@app.middleware("http")
+async def log_request_time(request: Request, call_nex):
+    start_time = time.time()
+    response = await call_nex(request)
+    process_time = time.time() - start_time
+    print(f"Request: {request.url} completed in: {process_time:.4f} seconds")
+    return response
+
 @app.get("/")
 async def root():
     return{"message" : "invoice-generator-mvp"}
@@ -26,7 +35,7 @@ country_timezones = {
 }
 
 @app.get("/time/{iso_code}")
-async def time(iso_code: str):
+async def get_time_by_iso_code(iso_code: str):
     # Co --> CO
     iso = iso_code.upper()
     timezone_str = country_timezones.get(iso)
